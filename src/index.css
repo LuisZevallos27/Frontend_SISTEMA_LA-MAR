@@ -3,14 +3,20 @@
 @theme {
   --color-marino-900: #031b34;
   --color-marino-800: #0b2d52;
+  --color-marino-700: #14406f;
   --color-lavanda: #8b8bff;
   --color-mesa-libre: #22c55e;
   --color-mesa-reservada: #e69a00;
   --color-mesa-ocupada: #b91c1c;
+
+  --shadow-tarjeta: 0 1px 2px rgb(3 27 52 / 0.06), 0 6px 16px -4px rgb(3 27 52 / 0.12);
+  --shadow-elevada: 0 14px 30px -10px rgb(3 27 52 / 0.35);
 }
 
 body {
   margin: 0;
-  background-color: #e5e5e5;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #eef2f8 0%, #e4e9f1 100%);
+  background-attachment: fixed;
+  font-family: "Arial", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
