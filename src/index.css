@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-marino-900: #031b34;
+  --color-marino-800: #0b2d52;
+  --color-lavanda: #8b8bff;
+  --color-mesa-libre: #22c55e;
+  --color-mesa-reservada: #e69a00;
+  --color-mesa-ocupada: #b91c1c;
+}
+
+body {
+  margin: 0;
+  background-color: #e5e5e5;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
