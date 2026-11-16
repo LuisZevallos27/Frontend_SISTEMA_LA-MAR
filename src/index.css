@@ -20,3 +20,13 @@ body {
   background-attachment: fixed;
   font-family: "Arial", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
+
+@media print {
+  body {
+    background: white;
+  }
+
+  header {
+    display: none !important;
+  }
+}

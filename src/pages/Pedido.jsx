@@ -1,15 +1,36 @@
-import { motion } from 'motion/react'
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { useNavigate, useParams } from 'react-router'
 import Carta from '../components/Carta'
+import Facturacion from '../components/Facturacion'
 import PanelPedido from '../components/PanelPedido'
+import Pestanas from '../components/Pestanas'
 import usePedido from '../hooks/usePedido'
 import { soles } from '../utils/formato'
+
+const VISTAS = [
+  { valor: 'orden', etiqueta: 'Orden' },
+  { valor: 'facturacion', etiqueta: 'Facturación' },
+]
 
 export default function Pedido() {
   const { idMesa } = useParams()
   const navigate = useNavigate()
-  const { mesa, platos, pedido, error, ocupado, abrir, agregar, cambiarCantidad, quitar, anular } =
-    usePedido(idMesa)
+  const [vista, setVista] = useState('orden')
+  const {
+    mesa,
+    platos,
+    pedido,
+    error,
+    ocupado,
+    abrir,
+    agregar,
+    cambiarCantidad,
+    quitar,
+    asignarCliente,
+    cerrar,
+    anular,
+  } = usePedido(idMesa)
 
   async function anularPedido() {
     if (!window.confirm('¿Anular el pedido de esta mesa? Se liberará la mesa.')) return
@@ -21,7 +42,7 @@ export default function Pedido() {
 
   return (
     <div className="pb-20 lg:pb-0">
-      <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-2 print:hidden">
         <div>
           <button
             type="button"
@@ -44,7 +65,7 @@ export default function Pedido() {
       </div>
 
       {error && (
-        <p role="alert" className="mb-4 rounded-md bg-red-100 px-3 py-2 text-sm text-red-800">
+        <p role="alert" className="mb-4 rounded-md bg-red-100 px-3 py-2 text-sm text-red-800 print:hidden">
           {error}
         </p>
       )}
@@ -72,25 +93,50 @@ export default function Pedido() {
       )}
 
       {mesa && pedido && (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <Carta platos={platos} onAgregar={agregar} deshabilitado={ocupado} />
-          <PanelPedido
-            pedido={pedido}
-            ocupado={ocupado}
-            onCambiar={cambiarCantidad}
-            onQuitar={quitar}
-            onAnular={anularPedido}
-          />
-        </div>
+        <>
+          <div className="mb-4 print:hidden">
+            <Pestanas etiqueta="Vistas del pedido" opciones={VISTAS} valor={vista} onCambiar={setVista} />
+          </div>
+
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={vista}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+            >
+              {vista === 'orden' ? (
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+                  <Carta platos={platos} onAgregar={agregar} deshabilitado={ocupado} />
+                  <PanelPedido
+                    pedido={pedido}
+                    ocupado={ocupado}
+                    onCambiar={cambiarCantidad}
+                    onQuitar={quitar}
+                    onAnular={anularPedido}
+                  />
+                </div>
+              ) : (
+                <Facturacion
+                  pedido={pedido}
+                  ocupado={ocupado}
+                  onAsignarCliente={asignarCliente}
+                  onCerrar={cerrar}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </>
       )}
 
-      {pedido && (
+      {pedido && vista === 'orden' && (
         <motion.a
           href="#resumen"
           initial={{ y: 80 }}
           animate={{ y: 0 }}
           transition={{ type: 'spring', stiffness: 380, damping: 34 }}
-          className="fixed inset-x-0 bottom-0 z-10 flex items-center justify-between bg-marino-900 px-5 py-3 text-white shadow-elevada lg:hidden"
+          className="fixed inset-x-0 bottom-0 z-10 flex items-center justify-between bg-marino-900 px-5 py-3 text-white shadow-elevada lg:hidden print:hidden"
         >
           <span>{pedido.items.reduce((n, i) => n + i.cantidad, 0)} platos</span>
           <span className="font-semibold">Ver pedido · {soles(pedido.total)}</span>

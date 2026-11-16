@@ -2,11 +2,13 @@ import { Navigate, Route, Routes } from 'react-router'
 import { INICIO, ROLES } from './auth/roles'
 import { useAuth } from './auth/useAuth'
 import Layout from './components/Layout'
+import Comprobante from './pages/Comprobante'
 import EnConstruccion from './pages/EnConstruccion'
 import Login from './pages/Login'
 import Mesas from './pages/Mesas'
-import RutaProtegida from './routes/RutaProtegida'
 import Pedido from './pages/Pedido'
+import Reservas from './pages/Reservas'
+import RutaProtegida from './routes/RutaProtegida'
 
 export default function App() {
   const { sesion } = useAuth()
@@ -22,10 +24,11 @@ export default function App() {
 
           <Route element={<RutaProtegida roles={[ROLES.MOZO, ROLES.ADMIN]} />}>
             <Route path="/pedido/:idMesa" element={<Pedido />} />
+            <Route path="/comprobante/:idPedido" element={<Comprobante />} />
           </Route>
 
           <Route element={<RutaProtegida roles={[ROLES.RECEPCIONISTA, ROLES.ADMIN]} />}>
-            <Route path="/reservas" element={<EnConstruccion titulo="Reservas" />} />
+            <Route path="/reservas" element={<Reservas />} />
           </Route>
 
           <Route element={<RutaProtegida roles={[ROLES.ADMIN]} />}>

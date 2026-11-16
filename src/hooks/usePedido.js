@@ -37,13 +37,14 @@ export default function usePedido(idMesa) {
     }
   }, [idMesa])
 
-  // Ejecuta una accion contra la API bloqueando los botones; devuelve true si salio bien
+  // Ejecuta una accion bloqueando los botones. Devuelve el resultado de la accion
+  // (o true si no devuelve nada) y false si fallo.
   async function ejecutar(accion) {
     setOcupado(true)
     setError('')
     try {
-      await accion()
-      return true
+      const resultado = await accion()
+      return resultado ?? true
     } catch (e) {
       setError(mensajeError(e))
       return false
@@ -76,7 +77,32 @@ export default function usePedido(idMesa) {
       setPedido(data)
     })
 
+  const asignarCliente = (dni) =>
+    ejecutar(async () => {
+      const { data } = await api.put(`/pedidos/${pedido.id}/cliente`, { dni })
+      setPedido(data)
+    })
+
+  const cerrar = (tipoComprobante) =>
+    ejecutar(async () => {
+      const { data } = await api.post(`/pedidos/${pedido.id}/cerrar`, { tipoComprobante })
+      return data
+    })
+
   const anular = () => ejecutar(() => api.post(`/pedidos/${pedido.id}/anular`, {}))
 
-  return { mesa, platos, pedido, error, ocupado, abrir, agregar, cambiarCantidad, quitar, anular }
+  return {
+    mesa,
+    platos,
+    pedido,
+    error,
+    ocupado,
+    abrir,
+    agregar,
+    cambiarCantidad,
+    quitar,
+    asignarCliente,
+    cerrar,
+    anular,
+  }
 }
