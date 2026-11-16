@@ -2,8 +2,8 @@ import { Navigate, Route, Routes } from 'react-router'
 import { INICIO, ROLES } from './auth/roles'
 import { useAuth } from './auth/useAuth'
 import Layout from './components/Layout'
+import Abastecimiento from './pages/Abastecimiento'
 import Comprobante from './pages/Comprobante'
-import EnConstruccion from './pages/EnConstruccion'
 import Login from './pages/Login'
 import Mesas from './pages/Mesas'
 import Pedido from './pages/Pedido'
@@ -32,7 +32,7 @@ export default function App() {
           </Route>
 
           <Route element={<RutaProtegida roles={[ROLES.ADMIN]} />}>
-            <Route path="/abastecimiento" element={<EnConstruccion titulo="Abastecimiento" />} />
+            <Route path="/abastecimiento" element={<Abastecimiento />} />
           </Route>
         </Route>
       </Route>

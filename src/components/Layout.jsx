@@ -5,13 +5,13 @@ import { MENU } from '../auth/roles'
 import { useAuth } from '../auth/useAuth'
 import Logo from './Logo'
 
-function EnlaceEscritorio({ to, label }) {
+function EnlaceEscritorio({ to, label, Icono }) {
   return (
     <NavLink
       to={to}
       className={({ isActive }) =>
-        'relative rounded-md px-3 py-2 text-sm font-medium transition-colors ' +
-        (isActive ? 'text-white' : 'text-slate-300 hover:text-white')
+        'relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ' +
+        (isActive ? 'text-marino-900' : 'text-slate-200 hover:bg-white/10 hover:text-white')
       }
     >
       {({ isActive }) => (
@@ -19,10 +19,11 @@ function EnlaceEscritorio({ to, label }) {
           {isActive && (
             <motion.span
               layoutId="nav-activo"
-              className="absolute inset-0 rounded-md bg-white/15"
+              className="absolute inset-0 rounded-full bg-linear-to-r from-lavanda to-indigo-300 shadow-lg shadow-lavanda/50"
               transition={{ type: 'spring', stiffness: 500, damping: 36 }}
             />
           )}
+          <Icono className="relative h-4 w-4" aria-hidden="true" />
           <span className="relative">{label}</span>
         </>
       )}
@@ -71,35 +72,50 @@ function Drawer({ items, sesion, onCerrar, onSalir }) {
           </button>
         </div>
 
-        <div className="rounded-xl bg-white/10 p-3 text-sm leading-tight">
+        <div className="rounded-xl bg-white/10 p-3 text-sm leading-tight ring-1 ring-white/10">
           <p className="font-semibold">
             {sesion?.nombres} {sesion?.apellidos}
           </p>
           <p className="mt-0.5 text-xs text-slate-300">{sesion?.cargo}</p>
         </div>
 
-        <nav className="flex flex-col gap-1">
-          {items.map((item, i) => (
-            <motion.div
-              key={item.to}
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 + i * 0.05 }}
-            >
-              <NavLink
-                to={item.to}
-                onClick={onCerrar}
-                className={({ isActive }) =>
-                  'block rounded-xl px-4 py-3 text-base font-medium transition-colors ' +
-                  (isActive
-                    ? 'bg-white/15 text-white'
-                    : 'text-slate-300 hover:bg-white/10 hover:text-white')
-                }
+        <nav className="flex flex-col gap-2">
+          {items.map((item, i) => {
+            const Icono = item.icono
+            return (
+              <motion.div
+                key={item.to}
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 + i * 0.05 }}
               >
-                {item.label}
-              </NavLink>
-            </motion.div>
-          ))}
+                <NavLink
+                  to={item.to}
+                  onClick={onCerrar}
+                  className={({ isActive }) =>
+                    'flex items-center gap-3 rounded-2xl px-3 py-3 text-base font-semibold transition-colors ' +
+                    (isActive
+                      ? 'bg-linear-to-r from-lavanda to-indigo-300 text-marino-900 shadow-lg shadow-lavanda/30'
+                      : 'text-slate-200 hover:bg-white/10 hover:text-white')
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span
+                        className={
+                          'grid h-9 w-9 place-items-center rounded-xl ' +
+                          (isActive ? 'bg-white/40' : 'bg-white/10')
+                        }
+                      >
+                        <Icono className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                      {item.label}
+                    </>
+                  )}
+                </NavLink>
+              </motion.div>
+            )
+          })}
         </nav>
 
         <button
@@ -155,9 +171,9 @@ export default function Layout() {
             <Logo />
           </div>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-1 rounded-full bg-black/20 p-1 shadow-inner ring-1 ring-white/10 md:flex">
             {items.map((item) => (
-              <EnlaceEscritorio key={item.to} to={item.to} label={item.label} />
+              <EnlaceEscritorio key={item.to} to={item.to} label={item.label} Icono={item.icono} />
             ))}
           </nav>
 

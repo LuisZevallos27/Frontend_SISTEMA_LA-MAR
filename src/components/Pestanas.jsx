@@ -13,6 +13,7 @@ export default function Pestanas({ opciones, valor, onCambiar, etiqueta }) {
     >
       {opciones.map((op) => {
         const activa = op.valor === valor
+        const tieneExtra = op.extra !== undefined && op.extra !== null
         return (
           <button
             key={op.valor}
@@ -33,7 +34,7 @@ export default function Pestanas({ opciones, valor, onCambiar, etiqueta }) {
               />
             )}
             <span className="relative">{op.etiqueta}</span>
-            {op.extra && <span className="relative ml-2 text-xs opacity-70">{op.extra}</span>}
+            {tieneExtra && <span className="relative ml-2 text-xs opacity-70">{op.extra}</span>}
           </button>
         )
       })}

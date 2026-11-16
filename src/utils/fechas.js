@@ -22,3 +22,11 @@ export function fechaLarga(iso) {
     })
     return texto.charAt(0).toUpperCase() + texto.slice(1)
 }
+
+// "2026-11-08T10:30:12.123" -> "08/11/2026 10:30"
+export function fechaHoraCorta(iso) {
+    if (!iso) return '-'
+    const [fecha, hora = ''] = iso.split('T')
+    const [a, m, d] = fecha.split('-')
+    return `${d}/${m}/${a} ${hora.slice(0, 5)}`.trim()
+}
