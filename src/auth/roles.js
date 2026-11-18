@@ -1,4 +1,4 @@
-import { CalendarDays, LayoutGrid, Truck } from 'lucide-react'
+import { CalendarDays, LayoutDashboard, LayoutGrid, Truck } from 'lucide-react'
 
 export const ROLES = { MOZO: 'Mozo', RECEPCIONISTA: 'Recepcionista', ADMIN: 'Administrador' }
 
@@ -6,9 +6,10 @@ export const ROLES = { MOZO: 'Mozo', RECEPCIONISTA: 'Recepcionista', ADMIN: 'Adm
 export const INICIO = {
   [ROLES.MOZO]: '/mesas',
   [ROLES.RECEPCIONISTA]: '/reservas',
-  [ROLES.ADMIN]: '/abastecimiento',
+  [ROLES.ADMIN]: '/dashboard',
 }
 
+const DASHBOARD = { to: '/dashboard', label: 'Dashboard', icono: LayoutDashboard }
 const MESAS = { to: '/mesas', label: 'Mesas', icono: LayoutGrid }
 const RESERVAS = { to: '/reservas', label: 'Reservas', icono: CalendarDays }
 const ABASTECIMIENTO = { to: '/abastecimiento', label: 'Abastecimiento', icono: Truck }
@@ -17,5 +18,5 @@ const ABASTECIMIENTO = { to: '/abastecimiento', label: 'Abastecimiento', icono: 
 export const MENU = {
   [ROLES.MOZO]: [MESAS],
   [ROLES.RECEPCIONISTA]: [RESERVAS, MESAS],
-  [ROLES.ADMIN]: [ABASTECIMIENTO, MESAS, RESERVAS],
+  [ROLES.ADMIN]: [DASHBOARD, ABASTECIMIENTO, MESAS, RESERVAS],
 }

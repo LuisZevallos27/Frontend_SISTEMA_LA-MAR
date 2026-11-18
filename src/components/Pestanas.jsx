@@ -2,7 +2,7 @@ import { useId } from 'react'
 import { motion } from 'motion/react'
 
 // opciones: [{ valor, etiqueta, extra? }]
-export default function Pestanas({ opciones, valor, onCambiar, etiqueta }) {
+export default function Pestanas({ opciones, valor, onCambiar, etiqueta, oscuro = false }) {
   const id = useId()
 
   return (
@@ -14,6 +14,13 @@ export default function Pestanas({ opciones, valor, onCambiar, etiqueta }) {
       {opciones.map((op) => {
         const activa = op.valor === valor
         const tieneExtra = op.extra !== undefined && op.extra !== null
+        const color = activa
+          ? oscuro
+            ? 'text-marino-900'
+            : 'text-white'
+          : oscuro
+            ? 'bg-white/10 text-white hover:bg-white/20'
+            : 'bg-white/70 text-marino-900 hover:bg-white'
         return (
           <button
             key={op.valor}
@@ -23,13 +30,13 @@ export default function Pestanas({ opciones, valor, onCambiar, etiqueta }) {
             onClick={() => onCambiar(op.valor)}
             className={
               'relative shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors ' +
-              (activa ? 'text-white' : 'bg-white/70 text-marino-900 hover:bg-white')
+              color
             }
           >
             {activa && (
               <motion.span
                 layoutId={`pestana-${id}`}
-                className="absolute inset-0 rounded-full bg-marino-900 shadow-elevada"
+                className={'absolute inset-0 rounded-full shadow-elevada ' + (oscuro ? 'bg-lavanda' : 'bg-marino-900')}
                 transition={{ type: 'spring', stiffness: 500, damping: 36 }}
               />
             )}

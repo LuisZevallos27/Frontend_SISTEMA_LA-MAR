@@ -5,7 +5,9 @@ export function fechaISO(d) {
     return `${d.getFullYear()}-${mes}-${dia}`
 }
 
-export const hoyISO = () => fechaISO(new Date())
+// "Hoy" siempre en hora de Lima, aunque el navegador esté en otra zona horaria
+export const hoyISO = () =>
+    new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima' }).format(new Date())
 
 export function sumarDias(iso, n) {
     const [a, m, d] = iso.split('-').map(Number)
